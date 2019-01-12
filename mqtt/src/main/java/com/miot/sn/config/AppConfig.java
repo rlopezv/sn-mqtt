@@ -7,11 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ *
+ * Model for appConfig
+ *
  * @author ramon
  *
  */
 public class AppConfig {
 
+	/**
+	 * List of clients
+	 */
 	public final List<MqttClientConfig> clients = new ArrayList<MqttClientConfig>();
 
 	public List<MqttClientConfig> getClientConfigs() {

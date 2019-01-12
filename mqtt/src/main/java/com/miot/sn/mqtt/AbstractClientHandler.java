@@ -18,6 +18,10 @@ import org.slf4j.LoggerFactory;
 import com.miot.sn.config.MqttClientConfig;
 
 /**
+ * Base class for clienthandlers Provides common services Uses an object of the
+ * type MqttClientConfig for its configuration It's handled as a Thread
+ * Implements MqttCallback form Pahoo for handling incoming messages
+ * 
  * @author ramon
  *
  */

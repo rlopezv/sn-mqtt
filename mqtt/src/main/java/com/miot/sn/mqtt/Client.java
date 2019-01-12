@@ -9,6 +9,12 @@ import org.slf4j.LoggerFactory;
 
 import com.miot.sn.config.MqttClientConfig;
 
+/**
+ * Implements a client for mqtt
+ *
+ * @author ramon
+ *
+ */
 public class Client {
 
 	private Logger LOGGER = LoggerFactory.getLogger(Client.class);
@@ -38,6 +44,12 @@ public class Client {
 		this.config = config;
 	}
 
+	/**
+	 * Open connection and subscibes to the configured subject It reatempts
+	 * connection every second
+	 *
+	 * @throws MqttException
+	 */
 	public void start() throws MqttException {
 		client = new MqttClient(getConfig().getBrokerUrl(), getConfig().getClientId(), persistence);
 		while (!client.isConnected()) {
@@ -110,6 +122,11 @@ public class Client {
 		}
 	}
 
+	/**
+	 * Assing handler that will treat the message received
+	 * 
+	 * @param abstractClientHandler
+	 */
 	public void setHandler(AbstractClientHandler abstractClientHandler) {
 		this.client.setCallback(abstractClientHandler);
 

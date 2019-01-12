@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The executable main class.
+ * The executable main class for server
  *
  */
 public class WebsocketMessagingServer extends Thread {

@@ -23,6 +23,9 @@ public class WebsocketMessageHandler {
 		return instance;
 	}
 
+	/**
+	 * Mantains open user Sessions
+	 */
 	private HashMap<String, Session> userSessions = new HashMap<>();
 
 	private WebsocketMessageHandler() {

@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
+ * Client config
+ * 
  * @author ramon
  *
  */

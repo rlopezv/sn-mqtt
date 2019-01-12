@@ -1,0 +1,13 @@
+{
+	"clients": [
+		{
+			"brokerUrl": "tcp://localhost:1883",
+			"implClassName": "com.miot.sn.mqtt.OneSaitClientHandler",
+			"topic": "g2/",
+			"additionalProperties" : {
+				"oneSaitApiPath":"https://www.onesaitplatform.online/api-manager/server/api/v1/g2_sn_node_data_rs",
+				"oneSaitApiKey":"84e58a9d95a442b38adbbcd74cf698e0"
+			}
+		}
+	]
+}

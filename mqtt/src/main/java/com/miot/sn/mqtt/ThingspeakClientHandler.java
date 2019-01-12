@@ -12,6 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Acts as a gateway to ThingSpeak Treats topic in order to remove groupName
+ * 
  * @author ramon
  *
  */
@@ -41,10 +43,16 @@ public class ThingspeakClientHandler extends AbstractClientHandler {
 
 	}
 
+	/**
+	 * Removes groupname in order to send to ThingSpeak
+	 *
+	 * @param topicName
+	 * @return
+	 */
 	private String getPublishTopic(String topicName) {
 		String result = null;
 		if (topicName != null) {
-			String groupName = getConfig().getOrDefault("groupName", "g2");
+			String groupName = getConfig().get("groupName");
 			int pos = topicName.indexOf(groupName);
 			if (pos >= 0) {
 				result = topicName.substring(groupName.length() + 1, topicName.length());
@@ -59,10 +67,15 @@ public class ThingspeakClientHandler extends AbstractClientHandler {
 		return connOpts;
 	}
 
+	/**
+	 * Opens connection to ThingSpeak
+	 *
+	 * @return
+	 * @throws MqttException
+	 */
 	public MqttClient getOutClient() throws MqttException {
 		if (outClient == null) {
-			outClient = new MqttClient(getConfig().getOrDefault("thingspeakUrl", "tcp://mqtt.thingspeak.com:1883"),
-					UUID.randomUUID().toString());
+			outClient = new MqttClient(getConfig().get("thingspeakUrl"), UUID.randomUUID().toString());
 		}
 		if (!outClient.isConnected()) {
 			outClient.connect(getConOpts());

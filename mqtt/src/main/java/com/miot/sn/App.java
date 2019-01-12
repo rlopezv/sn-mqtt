@@ -26,7 +26,7 @@ import com.miot.sn.mqtt.AbstractClientHandler;
 
 /**
  *
- * Class in charge of creating the environment for an scenario
+ * Class in charge of creating the environment for serving mqtt captured
  *
  * @author ramon
  *
@@ -62,7 +62,7 @@ public class App {
 //		} else {
 		App app = new App();
 		try {
-			configFile = "/home/ramon/workspace/eclipse/mqtt/etc/coap.json";
+			configFile = "/home/ramon/git/mqtt/mqtt/etc/mqtt.json";
 			app.configure(configFile);
 			app.start();
 		} catch (MqttException | JsonParseException | IOException e) {
@@ -89,6 +89,12 @@ public class App {
 		}
 	}
 
+	/**
+	 * Start the application Uses ExecutorService to limit the number of threads
+	 * involved
+	 *
+	 * @throws MqttException
+	 */
 	private void start() throws MqttException {
 
 		executor = Executors.newFixedThreadPool(clients.size());
@@ -128,6 +134,14 @@ public class App {
 		}
 	}
 
+	/**
+	 * Instantiate and configure clients from file
+	 *
+	 * @param configPath file containing client configuration
+	 * @throws JsonParseException
+	 * @throws JsonMappingException
+	 * @throws IOException
+	 */
 	private void configure(String configPath) throws JsonParseException, JsonMappingException, IOException {
 		setConfig(parseConfig(configPath));
 		for (MqttClientConfig clientConfig : getConfig().getClientConfigs()) {

@@ -3,7 +3,12 @@
 		{
 			"brokerUrl": "tcp://localhost:1883",
 			"implClassName": "com.miot.sn.mqtt.ThingspeakClientHandler",
-			"topic": "g2/"
+			"topic": "g2/",
+			"additionalProperties" : {
+				"thingspeakUrl": "tcp://mqtt.thingspeak.com:1883",
+				"groupName": "g2"
+			}
+			
 		}
 	]
 }

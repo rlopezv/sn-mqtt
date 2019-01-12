@@ -10,6 +10,9 @@ import com.miot.sn.mqtt.websocket.WebsocketMessageHandler;
 import com.miot.sn.mqtt.websocket.WebsocketMessagingServer;
 
 /**
+ *
+ * Starts server Sends messages to connected clients
+ *
  * @author ramon
  *
  */
@@ -21,6 +24,7 @@ public class WebsocketClientHandler extends AbstractClientHandler {
 
 	@Override
 	protected void init() {
+		// Creates server
 		server = new WebsocketMessagingServer();
 		server.setup();
 		server.start();

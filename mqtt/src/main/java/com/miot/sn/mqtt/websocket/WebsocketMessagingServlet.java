@@ -8,7 +8,7 @@ import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 
 /**
- * Well, it's just a servlet declaration.
+ * Well, it's just a servlet declaration for handling requests
  *
  */
 @SuppressWarnings("serial")
