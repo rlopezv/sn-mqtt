@@ -1,0 +1,164 @@
+[
+  {
+    "id": "b962859d.575b78",
+    "type": "mqtt in",
+    "z": "b3d4429f.4833",
+    "name": "",
+    "topic": "g2/#",
+    "qos": "0",
+    "broker": "53b050a8.9a626",
+    "x": 260.5,
+    "y": 140,
+    "wires": [
+      [
+        "49872c04.68f484"
+      ]
+    ]
+  },
+  {
+    "id": "9f5d3157.39625",
+    "type": "debug",
+    "z": "b3d4429f.4833",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "x": 490.5,
+    "y": 66,
+    "wires": []
+  },
+  {
+    "id": "b718c8d7.79f338",
+    "type": "onesait-platform-insert",
+    "z": "b3d4429f.4833",
+    "name": "insertData",
+    "ontology": "",
+    "server": "4660a1bf.a85d",
+    "check": false,
+    "x": 702.5,
+    "y": 137,
+    "wires": [
+      [
+        "d8565330.42bb"
+      ]
+    ]
+  },
+  {
+    "id": "49872c04.68f484",
+    "type": "function",
+    "z": "b3d4429f.4833",
+    "name": "Transform message",
+    "func": "var values;\nconst CHANNEL_GATEWAY = \"g2/channels/648459/publish/44GWV2IQ8OU9Z7X3\";\nconst CHANNEL_NODE = \"g2/channels/666894/publish/J8J79SZWTMYLVK09\";\nconst NODE_ID = \"g2_node_01\";\nconst GATEWAY_ID = \"g2_gateway_01\";\nvar newMsg = {};\nnewMsg.payload = {};\nvar sensorData = {};\nvar alert = false;\nconsole.log(msg.topic);\nconsole.log(msg.payload);\nif (msg.topic) {\n    if (CHANNEL_NODE===msg.topic) {\n        sensorData.sn_id = GATEWAY_ID;        \n    } else if (CHANNEL_GATEWAY===msg.topic) {\n        sensorData.sn_id = NODE_ID;\n    }\n    sensorData.time = new Date().toISOString();\n}\n\nif (msg.payload) {\n    values = msg.payload.split(\"&\");\n    if (values) {\n        for (index in values) {\n            let value = values[index];\n            let val = value.split(\"=\");\n            if (val.length==2) {\n                switch(val[0]) {\n  case 'field1':\n    sensorData.temperature = Number(val[1]); \n    break;\n  case 'field2':\n    sensorData.humidity = Number(val[1]);\n    break;\n  case 'field3':\n    sensorData.preasure = Number(val[1]);\n    break;\n  case 'field4':\n    sensorData.battery = Number(val[1]);\n    break;\n  case 'field5':\n    sensorData.acc_x = Number(val[1]);\n    break;\n  case 'field6':\n    sensorData.acc_y = Number(val[1]);\n    break;\n  case 'field7':\n    sensorData.acc_z = Number(val[1]);\n    break;\n  case 'field8':\n      switch (val[1]) {\n          case '1':\n            sensorData.type = 'PIR';\n              break;\n          case '2':\n            sensorData.type = 'FF';\n              break;\n          case '3':\n              sensorData.type = 'BAT';\n      }\n    alert = true;\n    break;\n}\n            }\n            \n        }\n    }\n}\nconsole.log(sensorData);\n\n \nif (!alert) {\n    newMsg.payload.g2_sn_node_data = sensorData;\n    newMsg.ontology = 'g2_sensor_data';\n    return [newMsg,null];\n} else {\n    newMsg.payload.g2_alert_data = sensorData;\n    newMsg.ontology = 'g2_alert_data';\n    return [null,newMsg];    \n}\n",
+    "outputs": 2,
+    "noerr": 0,
+    "x": 478.5,
+    "y": 213,
+    "wires": [
+      [
+        "9f5d3157.39625",
+        "b718c8d7.79f338"
+      ],
+      [
+        "dc68a4cd.5f4588"
+      ]
+    ]
+  },
+  {
+    "id": "d8565330.42bb",
+    "type": "debug",
+    "z": "b3d4429f.4833",
+    "name": "insert Result",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "x": 811.5,
+    "y": 64,
+    "wires": []
+  },
+  {
+    "id": "dc68a4cd.5f4588",
+    "type": "onesait-platform-insert",
+    "z": "b3d4429f.4833",
+    "name": "insertAlert",
+    "ontology": "",
+    "server": "194fb50.e3e904b",
+    "check": false,
+    "x": 711.5,
+    "y": 291,
+    "wires": [
+      [
+        "469b24cc.12e86c"
+      ]
+    ]
+  },
+  {
+    "id": "469b24cc.12e86c",
+    "type": "debug",
+    "z": "b3d4429f.4833",
+    "name": "inser alert",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "x": 804.5,
+    "y": 196,
+    "wires": []
+  },
+  {
+    "id": "53b050a8.9a626",
+    "type": "mqtt-broker",
+    "z": "",
+    "name": "g2_sn",
+    "broker": "138.100.48.251",
+    "port": "1883",
+    "clientid": "",
+    "usetls": false,
+    "compatmode": true,
+    "keepalive": "60",
+    "cleansession": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthPayload": "",
+    "closeTopic": "",
+    "closeQos": "0",
+    "closePayload": "",
+    "willTopic": "",
+    "willQos": "0",
+    "willPayload": ""
+  },
+  {
+    "id": "4660a1bf.a85d",
+    "type": "onesait-platform-connection-config",
+    "z": "",
+    "protocol": "REST",
+    "device": "g2_sn_node_data_client",
+    "instance": "g2_sn_node_data_client01",
+    "token": "d96935fe0d694c7687e6ceb63dac2ce3",
+    "renovation": "",
+    "ip": "",
+    "port": "",
+    "endpoint": "https://www.onesaitplatform.online",
+    "path": "",
+    "check": false
+  },
+  {
+    "id": "194fb50.e3e904b",
+    "type": "onesait-platform-connection-config",
+    "z": "",
+    "protocol": "REST",
+    "device": "g2_sn_node_alert_client",
+    "instance": "g2_alert_01",
+    "token": "288f668bdd0047049cb83a4df318d8fc",
+    "renovation": "",
+    "ip": "",
+    "port": "",
+    "endpoint": "https://www.onesaitplatform.online",
+    "path": "",
+    "check": false
+  }
+]

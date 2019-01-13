@@ -1,0 +1,138 @@
+[
+  {
+    "id": "df594a15.22f748",
+    "type": "tab",
+    "label": "g2_sn",
+    "disabled": false,
+    "info": ""
+  },
+  {
+    "id": "b3031f6d.faf93",
+    "type": "function",
+    "z": "df594a15.22f748",
+    "name": "Create Message",
+    "func": "var values;\nconst CHANNEL_GATEWAY = \"g2/channels/648459/publish/44GWV2IQ8OU9Z7X3\";\nconst CHANNEL_NODE = \"g2/channels/666894/publish/J8J79SZWTMYLVK09\";\nconst NODE_ID = \"g2_node_01\";\nconst GATEWAY_ID = \"g2_gateway_01\";\nvar newMsg = {};\nnewMsg.payload = {};\nvar sensorData = {};\nvar alert = false;\nif (msg.topic) {\n    if (CHANNEL_NODE===msg.topic) {\n        sensorData.sn_id = GATEWAY_ID;        \n    } else if (CHANNEL_GATEWAY===msg.topic) {\n        sensorData.sn_id = NODE_ID;\n    }\n    sensorData.time = new Date().toISOString();\n}\n\nif (msg.payload) {\n    values = msg.payload.split(\"&\");\n    if (values) {\n        for (index in values) {\n            let value = values[index];\n            let val = value.split(\"=\");\n            if (val.length==2) {\n                switch(val[0]) {\n  case 'field1':\n    sensorData.temperature = Number(val[1]); \n    break;\n  case 'field2':\n    sensorData.humidity = Number(val[1]);\n    break;\n  case 'field3':\n    sensorData.preasure = Number(val[1]);\n    break;\n  case 'field4':\n    sensorData.battery = Number(val[1]);\n    break;\n  case 'field5':\n    sensorData.acc_x = Number(val[1]);\n    break;\n  case 'field6':\n    sensorData.acc_y = Number(val[1]);\n    break;\n  case 'field7':\n    sensorData.acc_z = Number(val[1]);\n    break;\n    case 'field8':\n      switch (val[1]) {\n          case '1':\n            sensorData.type = 'PIR';\n              break;\n          case '2':\n            sensorData.type = 'FF';\n              break;\n          case '3':\n              sensorData.type = 'BAT';\n      }\n    alert = true;\n    break;\n}\n            }\n            \n        }\n    }\n}\n\nif (!alert) {\n    newMsg.payload.g2_sn_node_data = sensorData;\n    newMsg.ontology = 'g2_sensor_data';\n    return [newMsg,null];\n} else {\n    newMsg.payload.g2_alert_data = sensorData;\n    newMsg.ontology = 'g2_alert_data';\n    return [null,newMsg];    \n}\n",
+    "outputs": 2,
+    "noerr": 0,
+    "x": 320,
+    "y": 320,
+    "wires": [
+      [
+        "25a190ef.da26a"
+      ],
+      [
+        "93251e5c.7130c"
+      ]
+    ]
+  },
+  {
+    "id": "2559d879.ad11f8",
+    "type": "mqtt in",
+    "z": "df594a15.22f748",
+    "name": "g2",
+    "topic": "g2/#",
+    "qos": "0",
+    "broker": "d3c3ccbb.eb88e",
+    "x": 130,
+    "y": 300,
+    "wires": [
+      [
+        "b3031f6d.faf93"
+      ]
+    ]
+  },
+  {
+    "id": "724d595c.7e9888",
+    "type": "debug",
+    "z": "df594a15.22f748",
+    "name": "",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "x": 500,
+    "y": 280,
+    "wires": []
+  },
+  {
+    "id": "25a190ef.da26a",
+    "type": "onesaitplatform-insert",
+    "z": "df594a15.22f748",
+    "name": "INSERT DATA",
+    "ontology": "g2_sensor_data",
+    "authentication": "cmxvcGV6djptdDhZMTFFVi9zL0RjbG4vcFRUanUzZS9pY1l0ckQ2YWNodVNrbW8zTkZBPQ==",
+    "x": 380,
+    "y": 440,
+    "wires": [
+      [
+        "95502de.fbde1d"
+      ]
+    ]
+  },
+  {
+    "id": "95502de.fbde1d",
+    "type": "debug",
+    "z": "df594a15.22f748",
+    "name": "INSERT result",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "x": 450,
+    "y": 540,
+    "wires": []
+  },
+  {
+    "id": "93251e5c.7130c",
+    "type": "onesaitplatform-insert",
+    "z": "df594a15.22f748",
+    "name": "INSERT ALERT",
+    "ontology": "g2_alert_data",
+    "authentication": "cmxvcGV6djptdDhZMTFFVi9zL0RjbG4vcFRUanUzZS9pY1l0ckQ2YWNodVNrbW8zTkZBPQ==",
+    "x": 520,
+    "y": 380,
+    "wires": [
+      [
+        "fb8d5356.2b609"
+      ]
+    ]
+  },
+  {
+    "id": "fb8d5356.2b609",
+    "type": "debug",
+    "z": "df594a15.22f748",
+    "name": "Result Insert Alert",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "x": 700,
+    "y": 440,
+    "wires": []
+  },
+  {
+    "id": "d3c3ccbb.eb88e",
+    "type": "mqtt-broker",
+    "z": "",
+    "name": "g2_sn",
+    "broker": "138.100.48.251",
+    "port": "1883",
+    "clientid": "",
+    "usetls": false,
+    "compatmode": true,
+    "keepalive": "60",
+    "cleansession": true,
+    "birthTopic": "",
+    "birthQos": "0",
+    "birthPayload": "",
+    "closeTopic": "",
+    "closeQos": "0",
+    "closePayload": "",
+    "willTopic": "",
+    "willQos": "0",
+    "willPayload": ""
+  }
+]
