@@ -36,6 +36,8 @@ public class App {
 	private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
 	private final ObjectMapper mapper = new ObjectMapper();
 
+	private static App app = null;
+
 	private AppConfig config;
 
 	private ExecutorService executor = null;
@@ -55,28 +57,28 @@ public class App {
 	}
 
 	public static void main(final String[] args) {
-
 		String configFile = null;
-//		if (args == null || args.length == 0) {
-//			System.out.println("Usage: java -jar app.jar filename");
-//		} else {
-		App app = new App();
-		try {
-			configFile = "/home/ramon/git/mqtt/mqtt/etc/mqtt.json";
-			app.configure(configFile);
-			app.start();
-		} catch (MqttException | JsonParseException | IOException e) {
-			LOGGER.error("Error starting app", e);
+		System.out.println("Starting App");
+		if (args == null || args.length == 0) {
+			System.out.println("Usage: java -jar app.jar filename");
+		} else {
+			app = new App();
+			try {
+				configFile = "/home/ramon/git/mqtt/mqtt/etc/mqtt.json";
+				app.configure(configFile);
+				app.start();
+			} catch (MqttException | JsonParseException | IOException e) {
+				LOGGER.error("Error starting app", e);
+			}
 		}
-//		}
 
 		// Shutdown hook to ensure ordered close of consumers
-//		Runtime.getRuntime().addShutdownHook(new Thread() {
-//			@Override
-//			public void run() {
-//				app.finish();
-//			}
-//		});
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				app.finish();
+			}
+		});
 	}
 
 	private void finish() {
