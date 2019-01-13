@@ -1,0 +1,13 @@
+{
+	"clients": [
+		{
+			"brokerUrl": "tcp://localhost:1883",
+			"implClassName": "com.miot.sn.mqtt.ThingspeakRSClientHandler",
+			"topic": "g2/",
+			"additionalProperties" : {
+				"thingspeakApiPath": "https://api.thingspeak.com/update"
+			}
+			
+		}
+	]
+}

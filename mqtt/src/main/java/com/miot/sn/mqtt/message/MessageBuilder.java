@@ -76,7 +76,7 @@ public class MessageBuilder {
 	 * @param message
 	 * @return
 	 */
-	protected Map<String, String> buildMap(String message) {
+	public Map<String, String> buildMap(String message) {
 		Map<String, String> result = new HashMap<>();
 		if (message != null) {
 			String[] sValues = StringUtils.split(message, "&");

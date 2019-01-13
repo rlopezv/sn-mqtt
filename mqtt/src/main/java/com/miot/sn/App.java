@@ -64,14 +64,13 @@ public class App {
 		} else {
 			app = new App();
 			try {
-				configFile = "/home/ramon/git/mqtt/mqtt/etc/mqtt.json";
+				configFile = args[0];
 				app.configure(configFile);
 				app.start();
 			} catch (MqttException | JsonParseException | IOException e) {
 				LOGGER.error("Error starting app", e);
 			}
 		}
-
 		// Shutdown hook to ensure ordered close of consumers
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
