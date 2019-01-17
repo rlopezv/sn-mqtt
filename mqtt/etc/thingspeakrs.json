@@ -1,7 +1,7 @@
 {
 	"clients": [
 		{
-			"brokerUrl": "tcp://localhost:1883",
+			"brokerUrl":"tcp://138.100.48.251:1883",
 			"implClassName": "com.miot.sn.mqtt.ThingspeakRSClientHandler",
 			"topic": "g2/",
 			"additionalProperties" : {
